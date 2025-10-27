@@ -17,8 +17,8 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
-  String _selectedStartDate = '01 May, 2022';
-  String _selectedEndDate = '30 June, 2022';
+  String _selectedStartDate = "";
+  String _selectedEndDate = "";
 
   @override
   void dispose() {
