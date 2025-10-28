@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class OnboardingScreen extends StatelessWidget {
-  const OnboardingScreen({super.key});
+class letsStartScreen extends StatelessWidget {
+  const letsStartScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
