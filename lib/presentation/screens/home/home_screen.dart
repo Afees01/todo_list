@@ -6,6 +6,7 @@ import '../../bloc/todo_event.dart';
 import '../../bloc/todo_state.dart';
 import '../../../domain/entities/todo_entity.dart';
 import '../../utils/app_colors.dart';
+import '../../widgets/network_status_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -161,10 +162,61 @@ class _HomeScreenState extends State<HomeScreen> {
         if (state is TodoLoading) {
           return const Center(child: CircularProgressIndicator());
         } else if (state is TodoError) {
-          return Center(
-            child: Text(
-              'Error: ${state.message}',
-              style: GoogleFonts.poppins(color: AppColors.error),
+          return Container(
+            padding: EdgeInsets.all(isTablet ? 24 : 20),
+            decoration: BoxDecoration(
+              color: AppColors.error.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: AppColors.error.withOpacity(0.3),
+                width: 1,
+              ),
+            ),
+            child: Column(
+              children: [
+                Icon(
+                  Icons.error_outline,
+                  size: isTablet ? 48 : 40,
+                  color: AppColors.error,
+                ),
+                SizedBox(height: isTablet ? 16 : 12),
+                Text(
+                  'Connection Error',
+                  style: GoogleFonts.poppins(
+                    fontSize: isTablet ? 18 : 16,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.error,
+                  ),
+                ),
+                SizedBox(height: isTablet ? 8 : 4),
+                Text(
+                  _getUserFriendlyErrorMessage(state.message),
+                  style: GoogleFonts.poppins(
+                    fontSize: isTablet ? 14 : 12,
+                    color: AppColors.textSecondary,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: isTablet ? 16 : 12),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    context.read<TodoBloc>().add(LoadTodosEvent());
+                  },
+                  icon: const Icon(Icons.refresh),
+                  label: const Text('Retry'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.error,
+                    foregroundColor: Colors.white,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: isTablet ? 24 : 20,
+                      vertical: isTablet ? 12 : 8,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+              ],
             ),
           );
         } else if (state is TodoLoaded) {
@@ -337,5 +389,21 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  String _getUserFriendlyErrorMessage(String errorMessage) {
+    if (errorMessage.contains('No internet connection available')) {
+      return 'Please check your internet connection and try again.';
+    } else if (errorMessage.contains('SocketException')) {
+      return 'Network connection failed. Please check your internet connection.';
+    } else if (errorMessage.contains('TimeoutException')) {
+      return 'Request timed out. Please try again.';
+    } else if (errorMessage.contains('HandshakeException')) {
+      return 'Connection failed due to network restrictions. Please try a different network.';
+    } else if (errorMessage.contains('FormatException')) {
+      return 'Invalid response from server. Please try again.';
+    } else {
+      return 'Something went wrong. Please try again.';
+    }
   }
 }

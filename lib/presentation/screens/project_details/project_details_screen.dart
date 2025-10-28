@@ -48,6 +48,23 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
           ),
         ),
       ),
+
+      //  BlocListener<TodoBloc, TodoState>(
+      //   listener: (context, state) {
+      //     if (state is TodoLoaded) {
+      //       // Check if the current todo was deleted (not in the list anymore)
+      //       final todoExists =
+      //           state.todos.any((todo) => todo.id == widget.todoId);
+      //       if (!todoExists) {
+      //         // Todo was deleted, navigate back to home
+      //         Navigator.of(context).pushNamedAndRemoveUntil(
+      //           '/home',
+      //           (route) => false,
+      //         );
+      //       }
+      //     }
+      //   },
+      //   child:
       body: Center(
         child: Container(
           width: isDesktop ? 800 : double.infinity,
@@ -96,6 +113,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
           ),
         ),
       ),
+      // ),
     );
   }
 
@@ -419,7 +437,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
           ),
           SizedBox(height: isTablet ? 16 : 12),
           Text(
-            'Task not found',
+            'Task has been deleted',
             style: GoogleFonts.poppins(
               fontSize: isTablet ? 20 : 18,
               fontWeight: FontWeight.w600,
@@ -428,7 +446,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
           ),
           SizedBox(height: isTablet ? 8 : 4),
           Text(
-            'The requested task could not be found. It may have been deleted or the ID is invalid.',
+            'The requested task has been deleted.',
             style: GoogleFonts.poppins(
               fontSize: isTablet ? 16 : 14,
               color: AppColors.textSecondary,

@@ -38,7 +38,8 @@ class TodoRepositoryImpl implements TodoRepository {
       final models = response.map((json) => TodoModel.fromJson(json)).toList();
       return models.map(_mapModelToEntity).toList();
     } catch (e) {
-      throw Exception('Failed to fetch todos: $e');
+      final detailedError = _supabaseService.getDetailedErrorMessage(e);
+      throw Exception('Failed to fetch todos: $detailedError');
     }
   }
 
@@ -50,7 +51,8 @@ class TodoRepositoryImpl implements TodoRepository {
           ? _mapModelToEntity(TodoModel.fromJson(response))
           : null;
     } catch (e) {
-      throw Exception('Failed to fetch todo with id $id: $e');
+      final detailedError = _supabaseService.getDetailedErrorMessage(e);
+      throw Exception('Failed to fetch todo with id $id: $detailedError');
     }
   }
 
@@ -64,7 +66,8 @@ class TodoRepositoryImpl implements TodoRepository {
       }
       return _mapModelToEntity(TodoModel.fromJson(response.first));
     } catch (e) {
-      throw Exception('Failed to create todo: $e');
+      final detailedError = _supabaseService.getDetailedErrorMessage(e);
+      throw Exception('Failed to create todo: $detailedError');
     }
   }
 
@@ -79,7 +82,8 @@ class TodoRepositoryImpl implements TodoRepository {
       }
       return _mapModelToEntity(TodoModel.fromJson(response.first));
     } catch (e) {
-      throw Exception('Failed to update todo: $e');
+      final detailedError = _supabaseService.getDetailedErrorMessage(e);
+      throw Exception('Failed to update todo: $detailedError');
     }
   }
 
@@ -88,7 +92,8 @@ class TodoRepositoryImpl implements TodoRepository {
     try {
       await _supabaseService.delete('todo', id);
     } catch (e) {
-      throw Exception('Failed to delete todo: $e');
+      final detailedError = _supabaseService.getDetailedErrorMessage(e);
+      throw Exception('Failed to delete todo: $detailedError');
     }
   }
 }
