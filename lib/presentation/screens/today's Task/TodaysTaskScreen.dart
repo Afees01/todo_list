@@ -7,16 +7,16 @@ import '../../bloc/todo_state.dart';
 import '../../../domain/entities/todo_entity.dart';
 import '../../utils/app_colors.dart';
 
-class ProjectDetailsScreen extends StatefulWidget {
+class TodaysTaskScreen extends StatefulWidget {
   final String todoId;
 
-  const ProjectDetailsScreen({super.key, required this.todoId});
+  const TodaysTaskScreen({super.key, required this.todoId});
 
   @override
-  State<ProjectDetailsScreen> createState() => _ProjectDetailsScreenState();
+  State<TodaysTaskScreen> createState() => _ProjectDetailsScreenState();
 }
 
-class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
+class _ProjectDetailsScreenState extends State<TodaysTaskScreen> {
   @override
   void initState() {
     super.initState();
