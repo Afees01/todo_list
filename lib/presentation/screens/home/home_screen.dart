@@ -31,27 +31,28 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
-        child: Center(
+        child: SingleChildScrollView(
           child: Container(
             width: isDesktop ? 800 : double.infinity,
             constraints: BoxConstraints(
-              maxHeight: screenHeight,
+              minHeight: screenHeight - MediaQuery.of(context).padding.top,
             ),
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.all(isTablet ? 32 : 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildHeader(isTablet),
-                    SizedBox(height: isTablet ? 32 : 24),
-                    _buildProfileSection(isTablet),
-                    SizedBox(height: isTablet ? 32 : 24),
-                    _buildTaskToDoSection(isTablet),
-                    SizedBox(height: isTablet ? 24 : 16),
-                    _buildTodoList(isTablet),
-                  ],
-                ),
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(
+                isTablet ? 32 : 24,
+                isTablet ? 16 : 12,
+                isTablet ? 32 : 24,
+                isTablet ? 32 : 24,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildProfileSection(isTablet),
+                  SizedBox(height: isTablet ? 32 : 24),
+                  _buildTaskToDoSection(isTablet),
+                  SizedBox(height: isTablet ? 24 : 16),
+                  _buildTodoList(isTablet),
+                ],
               ),
             ),
           ),
@@ -67,105 +68,90 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildHeader(bool isTablet) {
+  Widget _buildProfileSection(bool isTablet) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          'Task Management',
-          style: GoogleFonts.poppins(
-            fontSize: isTablet ? 32 : 24,
-            fontWeight: FontWeight.bold,
-            color: AppColors.textPrimary,
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.shadowLight,
-                blurRadius: 8,
-                offset: const Offset(0, 2),
+        CircleAvatar(
+            radius: isTablet ? 30 : 24,
+            //: Colors.black,
+            child: Image.network(
+              "https://tse3.mm.bing.net/th/id/OIP.tBNJQwbzC2Tzo6UNgCPNvQHaHa?pid=Api&P=0&h=180",
+            )),
+        SizedBox(width: isTablet ? 16 : 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Hello, Afees',
+                style: GoogleFonts.poppins(
+                  fontSize: isTablet ? 20 : 16,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+              SizedBox(height: isTablet ? 4 : 2),
+              Text(
+                'Let\'s organize your tasks',
+                style: GoogleFonts.poppins(
+                  fontSize: isTablet ? 16 : 14,
+                  color: AppColors.textSecondary,
+                ),
               ),
             ],
           ),
-          child: const Icon(
-            Icons.notifications_outlined,
-            color: AppColors.textPrimary,
-          ),
         ),
+        Spacer(),
+        IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '');
+            },
+            icon: Icon(
+              Icons.notifications_none_outlined,
+              color: AppColors.primary,
+            ))
       ],
     );
   }
 
-  Widget _buildProfileSection(bool isTablet) {
-    return Container(
-      padding: EdgeInsets.all(isTablet ? 24 : 20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.shadowLight,
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          CircleAvatar(
-            radius: isTablet ? 30 : 24,
-            backgroundColor: AppColors.primary,
-            child: Text(
-              'A',
+  Widget _buildTaskToDoSection(bool isTablet) {
+    return BlocBuilder<TodoBloc, TodoState>(
+      buildWhen: (previous, current) => true,
+      builder: (context, state) {
+        int count = 0;
+        if (state is TodoLoaded) {
+          count = state.todos.length;
+        }
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              'Task To Do',
               style: GoogleFonts.poppins(
                 fontSize: isTablet ? 24 : 20,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: AppColors.textPrimary,
               ),
             ),
-          ),
-          SizedBox(width: isTablet ? 16 : 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Hello, Afees',
-                  style: GoogleFonts.poppins(
-                    fontSize: isTablet ? 20 : 16,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimary,
-                  ),
+            const SizedBox(width: 8),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withOpacity(0.08),
+                borderRadius: BorderRadius.circular(999),
+              ),
+              child: Text(
+                '$count',
+                style: GoogleFonts.poppins(
+                  fontSize: isTablet ? 14 : 12,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.primary,
                 ),
-                SizedBox(height: isTablet ? 4 : 2),
-                Text(
-                  'Let\'s organize your tasks',
-                  style: GoogleFonts.poppins(
-                    fontSize: isTablet ? 16 : 14,
-                    color: AppColors.textSecondary,
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTaskToDoSection(bool isTablet) {
-    return Text(
-      'Task To Do',
-      style: GoogleFonts.poppins(
-        fontSize: isTablet ? 24 : 20,
-        fontWeight: FontWeight.bold,
-        color: AppColors.textPrimary,
-      ),
+          ],
+        );
+      },
     );
   }
 
@@ -294,7 +280,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 PopupMenuButton<String>(
                   onSelected: (value) {
                     if (value == 'edit') {
-                      // TODO: Navigate to edit screen
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Edit functionality coming soon!'),
+                          backgroundColor: AppColors.info,
+                        ),
+                      );
                     } else if (value == 'delete') {
                       context
                           .read<TodoBloc>()
@@ -334,7 +325,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 SizedBox(width: isTablet ? 8 : 4),
                 Text(
-                  '${todo.startDate} - ${todo.endDate}',
+                  '${todo.startDate} to ${todo.endDate}',
                   style: GoogleFonts.poppins(
                     fontSize: isTablet ? 14 : 12,
                     color: AppColors.textHint,

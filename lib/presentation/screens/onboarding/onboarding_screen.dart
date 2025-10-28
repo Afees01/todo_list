@@ -32,20 +32,14 @@ class OnboardingScreen extends StatelessWidget {
                   width: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    gradient: const LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Color(0xFFF0F0F0),
-                        Color(0xFFE0E0E0),
-                      ],
-                    ),
+                    color: Colors.white,
                   ),
-                  child: const Center(
-                    child: Icon(
-                      Icons.work_outline,
-                      size: 120,
-                      color: Color(0xFF9C27B0),
+                  child: Center(
+                    child: Image.network(
+                      "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcThsQcNCbpSEW5Exn-qhCp4Zjou0CH_NtNZtXTu410Lm9-1Vb95",
+                      width: 200,
+                      height: 200,
+                      fit: BoxFit.contain,
                     ),
                   ),
                 ),

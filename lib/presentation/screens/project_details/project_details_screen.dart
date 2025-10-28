@@ -69,18 +69,25 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                       ),
                     );
                   } else if (state is TodoLoaded) {
-                    final todo = state.todos.firstWhere(
-                      (t) => t.id == widget.todoId,
-                      orElse: () => state.todos.first,
-                    );
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildTodoInfoCard(todo, isTablet),
-                        SizedBox(height: isTablet ? 32 : 24),
-                        _buildActionsSection(isTablet),
-                      ],
-                    );
+                    if (state.todos.isEmpty) {
+                      return _buildEmptyState(isTablet);
+                    }
+
+                    try {
+                      final todo = state.todos.firstWhere(
+                        (t) => t.id == widget.todoId,
+                      );
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildTodoInfoCard(todo, isTablet),
+                          SizedBox(height: isTablet ? 32 : 24),
+                          _buildActionsSection(isTablet),
+                        ],
+                      );
+                    } catch (e) {
+                      return _buildTodoNotFoundState(isTablet);
+                    }
                   }
                   return const SizedBox.shrink();
                 },
@@ -221,7 +228,6 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
         Expanded(
           child: ElevatedButton.icon(
             onPressed: () {
-              // TODO: Navigate to edit screen
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('Edit functionality coming soon!'),
@@ -344,5 +350,115 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
       'Dec'
     ];
     return months[month - 1];
+  }
+
+  Widget _buildEmptyState(bool isTablet) {
+    return Container(
+      padding: EdgeInsets.all(isTablet ? 40 : 32),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.shadowLight,
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Icon(
+            Icons.task_alt_outlined,
+            size: isTablet ? 80 : 64,
+            color: AppColors.textHint,
+          ),
+          SizedBox(height: isTablet ? 16 : 12),
+          Text(
+            'No tasks available',
+            style: GoogleFonts.poppins(
+              fontSize: isTablet ? 20 : 18,
+              fontWeight: FontWeight.w600,
+              color: AppColors.textPrimary,
+            ),
+          ),
+          SizedBox(height: isTablet ? 8 : 4),
+          Text(
+            'There are no tasks to display at the moment.',
+            style: GoogleFonts.poppins(
+              fontSize: isTablet ? 16 : 14,
+              color: AppColors.textSecondary,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTodoNotFoundState(bool isTablet) {
+    return Container(
+      padding: EdgeInsets.all(isTablet ? 40 : 32),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.shadowLight,
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Icon(
+            Icons.error_outline,
+            size: isTablet ? 80 : 64,
+            color: AppColors.error,
+          ),
+          SizedBox(height: isTablet ? 16 : 12),
+          Text(
+            'Task not found',
+            style: GoogleFonts.poppins(
+              fontSize: isTablet ? 20 : 18,
+              fontWeight: FontWeight.w600,
+              color: AppColors.textPrimary,
+            ),
+          ),
+          SizedBox(height: isTablet ? 8 : 4),
+          Text(
+            'The requested task could not be found. It may have been deleted or the ID is invalid.',
+            style: GoogleFonts.poppins(
+              fontSize: isTablet ? 16 : 14,
+              color: AppColors.textSecondary,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: isTablet ? 24 : 20),
+          ElevatedButton(
+            onPressed: () => Navigator.of(context).pop(),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
+              padding: EdgeInsets.symmetric(
+                horizontal: isTablet ? 32 : 24,
+                vertical: isTablet ? 16 : 12,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child: Text(
+              'Go Back',
+              style: GoogleFonts.poppins(
+                fontSize: isTablet ? 16 : 14,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

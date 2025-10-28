@@ -59,6 +59,9 @@ class TodoRepositoryImpl implements TodoRepository {
     try {
       final model = _mapEntityToModel(todo);
       final response = await _supabaseService.insert('todo', model.toJson());
+      if (response.isEmpty) {
+        throw Exception('No data returned from create operation');
+      }
       return _mapModelToEntity(TodoModel.fromJson(response.first));
     } catch (e) {
       throw Exception('Failed to create todo: $e');
@@ -71,6 +74,9 @@ class TodoRepositoryImpl implements TodoRepository {
       final model = _mapEntityToModel(todo);
       final response =
           await _supabaseService.update('todo', todo.id, model.toJson());
+      if (response.isEmpty) {
+        throw Exception('No data returned from update operation');
+      }
       return _mapModelToEntity(TodoModel.fromJson(response.first));
     } catch (e) {
       throw Exception('Failed to update todo: $e');

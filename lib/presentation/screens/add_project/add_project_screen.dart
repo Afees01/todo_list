@@ -43,13 +43,26 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
           icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text(
-          'Add Task',
-          style: GoogleFonts.poppins(
-            fontSize: isTablet ? 24 : 20,
-            fontWeight: FontWeight.bold,
-            color: AppColors.textPrimary,
-          ),
+        title: Row(
+          children: [
+            Text(
+              'Add Task',
+              style: GoogleFonts.poppins(
+                fontSize: isTablet ? 24 : 20,
+                fontWeight: FontWeight.bold,
+                color: AppColors.textPrimary,
+              ),
+            ),
+            Spacer(),
+            IconButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '');
+                },
+                icon: Icon(
+                  Icons.notifications_none_outlined,
+                  color: AppColors.primary,
+                ))
+          ],
         ),
       ),
       body: Center(
